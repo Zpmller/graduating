@@ -36,14 +36,13 @@ logs/
 *.sqlite
 *.sqlite3
 
-# Large ML assets and datasets
+# Large datasets and temporary model downloads
 ai_edge_system/data/
-ai_edge_system/models/
-*.pt
 *.pth
 *.onnx
 *.engine
 *.zip
+*.part
 
 # Local tool installs
 tools/
