@@ -1,0 +1,57 @@
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.cursor/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node/Vue
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Runtime data and generated artifacts
+tmp/
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+# Large ML assets and datasets
+ai_edge_system/data/
+ai_edge_system/models/
+*.pt
+*.pth
+*.onnx
+*.engine
+*.zip
+
+# Local tool installs
+tools/
+
+# Generated reports/cache
+**/tests/logs/
+**/tests/reports/
+**/scripts/eval_runs/
+**/static/calibration_temp/
+**/static/evidence/
+**/static/faces/

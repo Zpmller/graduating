@@ -1,0 +1,30 @@
+# Mining Hot-Work Safety Monitoring System
+# 启动: docker compose up -d
+# 停止: docker compose down
+
+version: '3.8'
+
+services:
+  # SRS Media Server: RTMP 推流接入 + WebRTC 播放
+  # Edge 推 RTMP -> SRS -> 前端 WHEP 播放 WebRTC
+  media-server:
+    image: ossrs/srs:5
+    container_name: safety-media-server
+    ports:
+      - "1935:1935"   # RTMP (Edge 推流)
+      - "1985:1985"   # HTTP API / WHEP
+      - "8080:8080"   # HTTP-FLV/HLS 备用
+      - "8000:8000/udp"  # WebRTC UDP
+    environment:
+      # 本机 IP，用于 WebRTC candidate（局域网访问时改为实际 IP）
+      CANDIDATE: "127.0.0.1"
+      # RTMP -> WebRTC 转换配置
+      SRS_HTTP_API_ENABLED: "on"
+      SRS_HTTP_SERVER_ENABLED: "on"
+    command: ./objs/srs -c conf/rtmp2rtc.conf
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1985/api/v1/versions"]
+      interval: 10s
+      timeout: 5s
+      retries: 3

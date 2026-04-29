@@ -1,0 +1,50 @@
+{
+  "parameters": {
+    "dataset": "F:\\mine\\ai_edge_system\\data\\gas_cylinder\\CylinDeRS",
+    "split": "test",
+    "weights": "F:\\mine\\ai_edge_system\\models\\best.pt",
+    "output_dir": "F:\\mine\\ai_edge_system\\distance",
+    "conf": 0.25,
+    "iou": 0.5,
+    "height_m": 1.25,
+    "focal": 640.0,
+    "cx": 320.0,
+    "cy": 320.0,
+    "device": "0",
+    "limit": null,
+    "class_id": 4,
+    "class_name": "gas_cylinder"
+  },
+  "dataset": {
+    "evaluated_images": 711,
+    "gt_cylinders": 2270,
+    "predicted_cylinders": 2231,
+    "images_with_at_least_two_gt_cylinders": 333
+  },
+  "detection": {
+    "tp": 1954,
+    "fp": 277,
+    "fn": 316,
+    "precision": 0.8758404303003138,
+    "recall": 0.8607929515418502,
+    "f1": 0.8682514996667408,
+    "images_with_gt": 711,
+    "images_with_at_least_one_matched_cylinder": 702,
+    "image_match_coverage": 0.9873417721518988,
+    "images_with_at_least_one_predicted_cylinder": 702,
+    "image_prediction_coverage": 0.9873417721518988
+  },
+  "distance_errors": {
+    "pair_count": 8254,
+    "image_count": 314,
+    "mae_m": 0.6255629552892342,
+    "rmse_m": 1.081800931879529,
+    "median_ae_m": 0.2736555949246924,
+    "bias_m": 0.07581791751319333,
+    "p90_ae_m": 1.841018555606379,
+    "p95_ae_m": 2.515008723433735,
+    "rme_percent": 35.47950716809829,
+    "mape_percent": 17.275860149171926
+  },
+  "runtime_seconds": 147.25306820869446
+}

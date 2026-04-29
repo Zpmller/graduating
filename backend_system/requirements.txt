@@ -1,0 +1,30 @@
+# FastAPI和相关依赖
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6  # 文件上传支持
+
+# 数据库
+sqlalchemy>=2.0.0
+aiomysql>=0.2.0  # 异步MySQL驱动
+pymysql>=1.1.0  # MySQL驱动（Alembic使用）
+alembic>=1.12.0  # 数据库迁移
+
+# 数据验证
+pydantic>=2.0.0
+pydantic-settings>=2.0.0  # 配置管理
+
+# 安全
+python-jose[cryptography]>=3.3.0  # JWT
+passlib[bcrypt]>=1.7.4  # 密码哈希
+bcrypt==3.2.2  # 锁定版本以解决passlib兼容性问题
+
+# 工具
+python-dotenv>=1.0.0  # 环境变量加载
+PyYAML>=6.0  # YAML处理
+httpx>=0.24.0  # HTTP客户端（流服务需要）
+
+# 标定脚本依赖
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+PyQt5>=5.15.0  # 标定脚本依赖（即使Headless模式也需要导入）
+requests>=2.31.0  # 标定脚本依赖

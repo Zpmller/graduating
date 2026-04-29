@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gas Cylinder Distance Evaluation</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #5b6472;
+      --line: #dbe2ea;
+      --blue: #2563eb;
+      --green: #059669;
+      --orange: #ea580c;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    header {
+      padding: 34px 44px 26px;
+      color: white;
+      background: linear-gradient(135deg, #1f2937, #2563eb 58%, #059669);
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+    header p { margin: 0; max-width: 980px; opacity: 0.94; }
+    main { max-width: 1180px; margin: 0 auto; padding: 26px; }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      margin: 18px 0;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+    }
+    h2 { margin: 0 0 14px; font-size: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .kpi {
+      border-left: 4px solid var(--blue);
+      background: #f8fbff;
+      padding: 14px 16px;
+      border-radius: 6px;
+    }
+    .kpi strong { display: block; font-size: 25px; margin-bottom: 2px; }
+    .kpi span { color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 9px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+    th { width: 56%; color: var(--muted); font-weight: 600; }
+    figure { margin: 0 0 22px; }
+    img { max-width: 100%; border: 1px solid var(--line); border-radius: 7px; background: white; }
+    figcaption { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    code { background: #eef2f7; border-radius: 4px; padding: 2px 5px; }
+    .note { color: var(--muted); }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Gas Cylinder Detection and Distance Evaluation</h1>
+  <p>Evaluation results for YOLO gas-cylinder detection and monocular pair-distance estimates.</p>
+</header>
+<main>
+  <section>
+    <h2>Summary</h2>
+    <div class="grid">
+      <div class="kpi"><strong>0.876</strong><span>Precision</span></div>
+      <div class="kpi"><strong>0.861</strong><span>Recall</span></div>
+      <div class="kpi"><strong>0.868</strong><span>F1</span></div>
+      <div class="kpi"><strong>0.626 m</strong><span>Pair-distance MAE</span></div>
+    </div>
+  </section>
+  <section>
+    <h2>Dataset and Parameters</h2>
+    <table><tr><th>Evaluated images</th><td>711</td></tr><tr><th>GT cylinders</th><td>2270</td></tr><tr><th>Images with &gt;=2 GT cylinders</th><td>333</td></tr></table>
+    <p class="note">Pseudo-GT is derived from human boxes with
+      <code>height_m=1.25</code>,
+      <code>f=640.0</code>,
+      <code>cx=320.0</code>,
+      <code>cy=320.0</code>.
+      It is reproducible but is not a measured physical distance.</p>
+  </section>
+  <section>
+    <h2>Detection Metrics</h2>
+    <table><tr><th>True positives</th><td>1954</td></tr><tr><th>False positives</th><td>277</td></tr><tr><th>False negatives</th><td>316</td></tr><tr><th>Precision</th><td>0.876</td></tr><tr><th>Recall</th><td>0.861</td></tr><tr><th>F1</th><td>0.868</td></tr><tr><th>Image coverage, &gt;=1 matched cylinder</th><td>0.987</td></tr><tr><th>Image coverage, &gt;=1 predicted cylinder</th><td>0.987</td></tr></table>
+  </section>
+  <section>
+    <h2>Distance Error Metrics</h2>
+    <table><tr><th>Matched cylinder pairs</th><td>8254</td></tr><tr><th>Images contributing pairs</th><td>314</td></tr><tr><th>MAE (m)</th><td>0.626</td></tr><tr><th>RMSE (m)</th><td>1.082</td></tr><tr><th>Median AE (m)</th><td>0.274</td></tr><tr><th>Bias (m)</th><td>0.076</td></tr><tr><th>P90 AE (m)</th><td>1.841</td></tr><tr><th>P95 AE (m)</th><td>2.515</td></tr><tr><th>RME, root relative (%)</th><td>35.480</td></tr><tr><th>MAPE (%)</th><td>17.276</td></tr></table>
+  </section>
+  <section>
+    <h2>Figures</h2>
+    <figure><img src="figures/detection_metric_overview.png" alt="detection_metric_overview"><figcaption>Detection Metric Overview</figcaption></figure>
+<figure><img src="figures/detection_tp_fp_fn.png" alt="detection_tp_fp_fn"><figcaption>Detection Tp Fp Fn</figcaption></figure>
+<figure><img src="figures/distance_gt_vs_pred.png" alt="distance_gt_vs_pred"><figcaption>Distance Gt Vs Pred</figcaption></figure>
+<figure><img src="figures/distance_error_distribution.png" alt="distance_error_distribution"><figcaption>Distance Error Distribution</figcaption></figure>
+<figure><img src="figures/distance_error_by_range.png" alt="distance_error_by_range"><figcaption>Distance Error By Range</figcaption></figure>
+<figure><img src="figures/top_error_examples.png" alt="top_error_examples"><figcaption>Top Error Examples</figcaption></figure>
+  </section>
+</main>
+</body>
+</html>

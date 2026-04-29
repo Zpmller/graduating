@@ -1,0 +1,76 @@
+{
+  "weights": "F:\\mine\\ai_edge_system\\models\\best.pt",
+  "data": "F:\\mine\\ai_edge_system\\data\\merge_hel123\\data.yaml",
+  "output": "F:\\mine\\ai_edge_system\\detect",
+  "device": "0",
+  "splits": {
+    "val": {
+      "metrics/precision(B)": 0.8913471606825337,
+      "metrics/recall(B)": 0.8578828135046954,
+      "metrics/mAP50(B)": 0.8913893513868139,
+      "metrics/mAP50-95(B)": 0.6361048854589625,
+      "fitness": 0.6361048854589625,
+      "map50": 0.8913893513868139,
+      "map75": 0.6718993346255602,
+      "map": 0.6361048854589625,
+      "maps": [
+        0.864125745134009,
+        0.37509741045575423,
+        0.5810218112380511,
+        0.43718756464246133,
+        0.7482657014887706,
+        0.7787648911978489,
+        0.6682710740558422
+      ],
+      "save_dir": "F:\\mine\\ai_edge_system\\detect\\val",
+      "plots": [
+        "BoxF1_curve.png",
+        "BoxPR_curve.png",
+        "BoxP_curve.png",
+        "BoxR_curve.png",
+        "confusion_matrix.png",
+        "confusion_matrix_normalized.png",
+        "val_batch0_labels.jpg",
+        "val_batch0_pred.jpg",
+        "val_batch1_labels.jpg",
+        "val_batch1_pred.jpg",
+        "val_batch2_labels.jpg",
+        "val_batch2_pred.jpg"
+      ]
+    },
+    "test": {
+      "metrics/precision(B)": 0.910462833479672,
+      "metrics/recall(B)": 0.8509356971565305,
+      "metrics/mAP50(B)": 0.8929106473215981,
+      "metrics/mAP50-95(B)": 0.6537054003210843,
+      "fitness": 0.6537054003210843,
+      "map50": 0.8929106473215981,
+      "map75": 0.6877470473444122,
+      "map": 0.6537054003210843,
+      "maps": [
+        0.876914756319707,
+        0.40951461637692904,
+        0.5440158216200067,
+        0.575364587009087,
+        0.7315456896891622,
+        0.7745420486719149,
+        0.6640402825607838
+      ],
+      "save_dir": "F:\\mine\\ai_edge_system\\detect\\test",
+      "plots": [
+        "BoxF1_curve.png",
+        "BoxPR_curve.png",
+        "BoxP_curve.png",
+        "BoxR_curve.png",
+        "confusion_matrix.png",
+        "confusion_matrix_normalized.png",
+        "val_batch0_labels.jpg",
+        "val_batch0_pred.jpg",
+        "val_batch1_labels.jpg",
+        "val_batch1_pred.jpg",
+        "val_batch2_labels.jpg",
+        "val_batch2_pred.jpg"
+      ]
+    }
+  }
+}
