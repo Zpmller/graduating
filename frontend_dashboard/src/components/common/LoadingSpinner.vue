@@ -22,18 +22,25 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .loading-spinner {
-  @apply flex items-center justify-center py-8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
 }
 
 .loading-spinner--center {
-  @apply min-h-32;
+  min-height: 8rem;
 }
 
 .loading-text {
-  @apply ml-2 text-gray-600;
+  margin-left: 8px;
+  color: var(--text-secondary);
+  font-weight: 650;
 }
 
 .is-loading {
-  @apply text-2xl text-blue-500;
+  color: var(--accent-cyan);
+  font-size: 24px;
+  filter: drop-shadow(0 0 10px rgba(28, 199, 255, 0.45));
 }
 </style>

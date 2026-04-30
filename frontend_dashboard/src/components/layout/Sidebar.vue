@@ -1,7 +1,11 @@
 <template>
   <div class="sidebar">
     <div class="sidebar-header">
+      <div class="brand-mark">
+        <el-icon><Monitor /></el-icon>
+      </div>
       <h2 class="sidebar-title">矿山安全监控</h2>
+      <span class="sidebar-subtitle">Hot Work Command</span>
     </div>
 
     <nav class="sidebar-nav">
@@ -104,64 +108,182 @@ const handleLogout = () => {
 
 <style scoped>
 .sidebar {
-  @apply bg-gray-800 text-white h-full flex flex-col;
   width: 250px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  color: var(--text-primary);
+  background:
+    linear-gradient(180deg, rgba(5, 23, 38, 0.94), rgba(3, 12, 23, 0.88)),
+    rgba(3, 12, 23, 0.9);
+  border-right: 1px solid rgba(126, 211, 255, 0.18);
+  box-shadow: 12px 0 38px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(20px) saturate(130%);
 }
 
 .sidebar-header {
-  @apply p-6 border-b border-gray-700;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 6px 12px;
+  align-items: center;
+  padding: 18px;
+  border-bottom: 1px solid rgba(126, 211, 255, 0.14);
+}
+
+.brand-mark {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  grid-row: span 2;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(28, 199, 255, 0.5);
+  border-radius: 8px;
+  color: #9aefff;
+  background: rgba(28, 199, 255, 0.1);
+  box-shadow: 0 0 22px rgba(28, 199, 255, 0.2);
 }
 
 .sidebar-title {
-  @apply text-xl font-bold text-center;
+  margin: 0;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.sidebar-subtitle {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .sidebar-nav {
-  @apply flex-1 py-4;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 12px;
 }
 
 .nav-item {
-  @apply flex items-center px-6 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors;
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text-secondary);
   text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-item:hover {
+  color: #ffffff;
+  border-color: rgba(126, 211, 255, 0.2);
+  background: rgba(28, 199, 255, 0.08);
 }
 
 .nav-item.active {
-  @apply bg-blue-600 text-white;
+  color: #ffffff;
+  border-color: rgba(28, 199, 255, 0.52);
+  background: linear-gradient(90deg, rgba(28, 199, 255, 0.22), rgba(28, 199, 255, 0.06));
+  box-shadow: inset 3px 0 0 var(--accent-cyan), 0 0 20px rgba(28, 199, 255, 0.12);
 }
 
 .nav-icon {
-  @apply mr-3;
+  margin-right: 11px;
+  color: #84e8ff;
+  font-size: 18px;
 }
 
 .nav-text {
-  @apply font-medium;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .sidebar-footer {
-  @apply p-4 border-t border-gray-700;
+  padding: 14px;
+  border-top: 1px solid rgba(126, 211, 255, 0.14);
 }
 
 .user-info {
-  @apply flex items-center mb-4;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid rgba(126, 211, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .user-avatar {
-  @apply w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center mr-3;
+  display: flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  border: 1px solid rgba(57, 231, 159, 0.32);
+  border-radius: 50%;
+  color: #8cf2c3;
+  background: rgba(57, 231, 159, 0.1);
 }
 
 .user-details {
-  @apply flex-1;
+  min-width: 0;
+  flex: 1;
 }
 
 .user-name {
-  @apply font-medium text-sm;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .user-role {
-  @apply text-xs text-gray-400;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
 }
 
 .logout-btn {
-  @apply w-full text-left text-gray-300 hover:text-white;
+  width: 100%;
+  justify-content: flex-start;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(126, 211, 255, 0.18);
+  }
+
+  .sidebar-header,
+  .sidebar-footer {
+    display: none;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+  }
+
+  .nav-item {
+    flex: 0 0 auto;
+  }
 }
 </style>

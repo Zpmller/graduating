@@ -1,8 +1,7 @@
 <template>
   <AppLayout>
-    <div class="history-view">
-      <!-- Filters -->
-      <div class="filters-section">
+    <div class="history-view mine-page">
+      <div class="filters-section glass-panel">
         <el-form :inline="true" :model="filters" class="filters-form">
           <el-form-item label="警报类型">
             <el-select
@@ -85,8 +84,7 @@
         </el-form>
       </div>
 
-      <!-- Alerts Table -->
-      <div class="table-section">
+      <div class="table-section glass-panel">
         <el-table
           :data="alertStore.historicalAlerts"
           :loading="alertStore.loading"
@@ -157,7 +155,6 @@
           </el-table-column>
         </el-table>
 
-        <!-- Pagination -->
         <div class="pagination-container">
           <el-pagination
             v-model:current-page="currentPage"
@@ -171,7 +168,6 @@
         </div>
       </div>
 
-      <!-- Image Modal -->
       <el-dialog
         v-model="imageModalVisible"
         title="警报图片"
@@ -329,42 +325,86 @@ onMounted(async () => {
 
 <style scoped>
 .history-view {
-  @apply space-y-6;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .filters-section {
-  @apply bg-white rounded-lg shadow-sm p-6;
+  padding: 16px;
+  border-radius: 8px;
 }
 
 .filters-form {
-  @apply space-y-4 md:space-y-0 md:space-x-4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: flex-end;
+}
+
+.filters-form :deep(.el-form-item) {
+  margin-right: 0;
+  margin-bottom: 0;
 }
 
 .filter-select {
-  @apply w-40;
+  width: 160px;
 }
 
 .table-section {
-  @apply bg-white rounded-lg shadow-sm p-6;
+  padding: 16px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.table-section :deep(.el-table) {
+  min-width: 860px;
+}
+
+.table-section {
+  overflow-x: auto;
 }
 
 .message-cell {
-  @apply flex items-center space-x-2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .message-text {
-  @apply flex-1;
+  flex: 1;
+  color: var(--text-primary);
 }
 
 .message-image {
-  @apply w-8 h-8 object-cover rounded cursor-pointer;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  border: 1px solid rgba(126, 211, 255, 0.24);
+  border-radius: 6px;
+  object-fit: cover;
 }
 
 .pagination-container {
-  @apply mt-6 flex justify-center;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
 }
 
 .modal-image {
-  @apply w-full max-h-96 object-contain;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+@media (max-width: 720px) {
+  .filter-select {
+    width: 100%;
+  }
+
+  .filters-form :deep(.el-form-item),
+  .filters-form :deep(.el-date-editor.el-input) {
+    width: 100%;
+  }
 }
 </style>

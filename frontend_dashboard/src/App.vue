@@ -9,7 +9,6 @@
 </script>
 
 <style>
-/* Global styles */
 html, body {
   margin: 0;
   padding: 0;
@@ -17,9 +16,10 @@ html, body {
 }
 
 #app {
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  font-family: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--text-primary);
   height: 100vh;
 }
 </style>

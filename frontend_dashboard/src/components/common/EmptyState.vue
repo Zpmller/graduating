@@ -29,6 +29,6 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .empty-state {
-  @apply py-12;
+  padding: 2rem 0;
 }
 </style>

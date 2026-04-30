@@ -1,8 +1,7 @@
 <template>
   <AppLayout>
-    <div class="dashboard">
-      <!-- 顶部状态栏 -->
-      <div class="dashboard-toolbar">
+    <div class="dashboard mine-page">
+      <div class="dashboard-toolbar glass-panel">
         <div class="stats-row">
           <span class="stat-pill stat-alerts">
             <el-icon><WarningFilled /></el-icon>
@@ -21,7 +20,7 @@
             {{ taskStore.pendingTasks.length }} 待办
           </span>
         </div>
-        <div class="toolbar-actions">
+        <div class="toolbar-actions page-actions">
           <el-button size="small" @click="refreshAll">
             <el-icon><Refresh /></el-icon>
             刷新
@@ -29,7 +28,6 @@
         </div>
       </div>
 
-      <!-- 视频墙 -->
       <div class="video-wall">
         <div
           v-for="(slot, index) in wallSlots"
@@ -107,50 +105,127 @@ onUnmounted(() => {
 
 <style scoped>
 .dashboard {
-  @apply flex flex-col h-full min-h-0 bg-neutral-950;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .dashboard-toolbar {
-  @apply flex-shrink-0 flex items-center justify-between px-4 py-2 bg-neutral-900 border-b border-neutral-800;
+  flex-shrink: 0;
 }
 
 .stats-row {
-  @apply flex items-center gap-3 flex-wrap;
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(4, minmax(136px, 1fr));
+  gap: 10px;
 }
 
 .stat-pill {
-  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded text-sm;
+  position: relative;
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  overflow: hidden;
+  border: 1px solid rgba(126, 211, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 15px;
+  font-weight: 780;
+  line-height: 1;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.stat-pill::after {
+  position: absolute;
+  inset: auto 10px 0;
+  height: 1px;
+  content: '';
+  background: currentColor;
+  opacity: 0.38;
+  box-shadow: 0 0 14px currentColor;
+}
+
+.stat-pill .el-icon {
+  font-size: 20px;
 }
 
 .stat-alerts {
-  @apply bg-red-900/50 text-red-300 border border-red-700/50;
+  color: #ff8fa1;
+  border-color: rgba(255, 77, 104, 0.36);
+  background: rgba(255, 77, 104, 0.1);
 }
 
 .stat-warning {
-  @apply bg-amber-900/50 text-amber-300 border border-amber-700/50;
+  color: #ffd17a;
+  border-color: rgba(255, 186, 58, 0.34);
+  background: rgba(255, 186, 58, 0.1);
 }
 
 .stat-online {
-  @apply bg-emerald-900/50 text-emerald-300 border border-emerald-700/50;
+  color: #80f0bd;
+  border-color: rgba(57, 231, 159, 0.34);
+  background: rgba(57, 231, 159, 0.1);
 }
 
 .stat-tasks {
-  @apply bg-blue-900/50 text-blue-300 border border-blue-700/50;
+  color: #8edcff;
+  border-color: rgba(28, 199, 255, 0.34);
+  background: rgba(28, 199, 255, 0.1);
 }
 
 .toolbar-actions {
-  @apply flex items-center gap-2;
+  justify-content: flex-end;
 }
 
 .video-wall {
-  @apply flex-1 p-3 overflow-auto;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 3px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-template-rows: repeat(3, minmax(180px, 1fr));
-  gap: 8px;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .video-wall-cell {
-  @apply min-h-0 rounded overflow-hidden;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+@media (max-width: 1200px) {
+  .stats-row {
+    grid-template-columns: repeat(2, minmax(136px, 1fr));
+  }
+
+  .video-wall {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(170px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard {
+    height: auto;
+  }
+
+  .stats-row,
+  .video-wall {
+    grid-template-columns: 1fr;
+  }
+
+  .video-wall {
+    grid-template-rows: none;
+  }
+
+  .video-wall-cell {
+    min-height: 190px;
+  }
 }
 </style>

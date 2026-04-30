@@ -23,7 +23,7 @@
           class="cell-placeholder cell-error"
         >
           <el-icon class="placeholder-icon"><VideoPause /></el-icon>
-          <span>{{ streamStore.getStreamStatus(props.device?.id ?? 0)?.error || '连接失败' }}</span>
+          <span>连接失败</span>
         </div>
       </template>
       <!-- 无设备或无流地址：NO SIGNAL -->
@@ -36,7 +36,7 @@
 
       <!-- 底部标签：设备名 + 时间 -->
       <div class="cell-label">
-        <span class="cell-name">{{ device?.name || '未命名' }}</span>
+        <span class="cell-name">{{ device?.name || 'NO SIGNAL' }}</span>
         <span class="cell-time">{{ currentTime }}</span>
       </div>
     </div>
@@ -117,50 +117,112 @@ onUnmounted(() => {
 
 <style scoped>
 .stream-wall-cell {
-  @apply aspect-video bg-black rounded overflow-hidden border border-gray-800;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  overflow: hidden;
+  border: 1px solid rgba(126, 211, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.86);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 14px 30px rgba(0, 0, 0, 0.22);
+}
+
+.stream-wall-cell::before {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  content: '';
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.026) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.28;
 }
 
 .cell-inner {
-  @apply relative w-full h-full flex items-center justify-center;
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .cell-video {
-  @apply w-full h-full object-cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cell-placeholder {
-  @apply absolute inset-0 flex flex-col items-center justify-center text-gray-500;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(168, 196, 216, 0.62);
 }
 
 .cell-loading {
-  @apply text-blue-400;
+  color: #80e8ff;
 }
 
 .cell-error {
-  @apply text-amber-500;
+  color: #ffd17a;
 }
 
 .cell-no-signal {
-  @apply bg-neutral-900 text-neutral-600;
+  background:
+    linear-gradient(135deg, rgba(6, 21, 34, 0.92), rgba(1, 8, 14, 0.96)),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 5px);
+  color: rgba(117, 143, 160, 0.68);
 }
 
 .no-signal-text {
-  @apply text-sm font-mono tracking-widest;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
 }
 
 .placeholder-icon {
-  @apply text-2xl mb-1;
+  margin-bottom: 5px;
+  font-size: 26px;
 }
 
 .cell-label {
-  @apply absolute bottom-0 left-0 right-0 px-2 py-1 bg-black/70 text-white text-xs flex justify-between items-center;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(126, 211, 255, 0.16);
+  color: #ffffff;
+  background: linear-gradient(180deg, rgba(3, 12, 23, 0.45), rgba(3, 12, 23, 0.86));
+  font-size: 12px;
+  backdrop-filter: blur(12px);
 }
 
 .cell-name {
-  @apply truncate max-w-[70%];
+  max-width: 68%;
+  overflow: hidden;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cell-time {
-  @apply text-gray-400 tabular-nums;
+  color: var(--text-muted);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 </style>

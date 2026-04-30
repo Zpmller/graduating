@@ -1,8 +1,7 @@
 <template>
   <AppLayout>
-    <div class="tasks-view">
-      <!-- Header Actions -->
-      <div class="header-actions">
+    <div class="tasks-view mine-page">
+      <div class="header-actions glass-panel glass-toolbar">
         <el-button type="primary" @click="showCreateDialog = true">
           <el-icon><Plus /></el-icon>
           创建任务
@@ -13,12 +12,11 @@
         </el-button>
       </div>
 
-      <!-- Tasks List -->
-      <div v-if="taskStore.loading" class="loading-container">
+      <div v-if="taskStore.loading" class="loading-container glass-panel">
         <LoadingSpinner text="加载任务中..." />
       </div>
 
-      <div v-else-if="taskStore.tasks.length === 0" class="empty-container">
+      <div v-else-if="taskStore.tasks.length === 0" class="empty-container glass-panel">
         <EmptyState
           description="暂无任务"
           action-text="创建任务"
@@ -31,7 +29,7 @@
           <div
             v-for="task in taskStore.tasks"
             :key="task.id"
-            class="task-card"
+            class="task-card glass-panel"
             :class="`task-card--${task.priority.toLowerCase()}`"
           >
             <div class="task-header">
@@ -321,75 +319,137 @@ onUnmounted(() => {
 
 <style scoped>
 .tasks-view {
-  @apply space-y-6;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .header-actions {
-  @apply flex justify-between items-center;
+  justify-content: flex-start;
 }
 
 .tasks-container {
-  @apply space-y-6;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .tasks-grid {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .task-card {
-  @apply bg-white rounded-lg shadow-sm border p-6;
+  position: relative;
+  padding: 16px;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.task-card:hover {
+  border-color: rgba(28, 199, 255, 0.42);
+  box-shadow: var(--shadow-glass), 0 0 24px rgba(28, 199, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.task-card::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 2px;
+  content: '';
+  background: currentColor;
+  opacity: 0.52;
+  box-shadow: 0 0 18px currentColor;
 }
 
 .task-card--high {
-  @apply border-red-200;
+  color: var(--accent-red);
+  border-color: rgba(255, 77, 104, 0.28);
 }
 
 .task-card--medium {
-  @apply border-yellow-200;
+  color: var(--accent-amber);
+  border-color: rgba(255, 186, 58, 0.28);
 }
 
 .task-card--low {
-  @apply border-blue-200;
+  color: var(--accent-cyan);
+  border-color: rgba(28, 199, 255, 0.28);
 }
 
 .task-header {
-  @apply flex items-center justify-between mb-4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
 .task-content {
-  @apply mb-4;
+  margin-bottom: 16px;
 }
 
 .task-title {
-  @apply text-lg font-semibold text-gray-800 mb-2;
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 850;
+  line-height: 1.25;
 }
 
 .task-description {
-  @apply text-gray-600 mb-3;
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .task-meta {
-  @apply space-y-2 text-sm text-gray-500;
+  display: grid;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 650;
 }
 
 .task-assignee,
 .task-due-date,
 .task-created {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
 }
 
 .task-assignee .el-icon,
 .task-due-date .el-icon,
 .task-created .el-icon {
-  @apply mr-1;
+  margin-right: 6px;
+  color: #89ddff;
 }
 
 .task-actions {
-  @apply flex justify-end space-x-2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .loading-container,
 .empty-container {
-  @apply py-12;
+  padding: 24px;
+  border-radius: 8px;
+}
+
+@media (max-width: 1180px) {
+  .tasks-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

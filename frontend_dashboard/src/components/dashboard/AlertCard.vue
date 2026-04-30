@@ -159,76 +159,109 @@ const closeImageModal = () => {
 
 <style scoped>
 .alert-card {
-  @apply bg-white rounded-lg shadow-sm border p-4 mb-4;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(126, 211, 255, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.018)),
+    rgba(8, 29, 47, 0.72);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(18px);
 }
 
 .alert-card--critical {
-  @apply border-red-300 bg-red-50;
+  border-color: rgba(255, 77, 104, 0.42);
+  background-color: rgba(255, 77, 104, 0.08);
 }
 
 .alert-card--danger {
-  @apply border-orange-300 bg-orange-50;
+  border-color: rgba(255, 130, 58, 0.38);
+  background-color: rgba(255, 130, 58, 0.08);
 }
 
 .alert-card--warning {
-  @apply border-yellow-300 bg-yellow-50;
+  border-color: rgba(255, 186, 58, 0.36);
+  background-color: rgba(255, 186, 58, 0.08);
 }
 
 .alert-header {
-  @apply flex items-center justify-between mb-3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
 .alert-type {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
 }
 
 .alert-icon {
-  @apply mr-2 text-lg;
+  margin-right: 8px;
+  color: #91e9ff;
+  font-size: 18px;
 }
 
 .alert-type-text {
-  @apply font-medium text-gray-800;
+  color: #ffffff;
+  font-weight: 800;
 }
 
 .alert-severity {
-  @apply text-sm;
+  font-size: 13px;
 }
 
 .alert-content {
-  @apply mb-3;
+  margin-bottom: 12px;
 }
 
 .alert-message {
-  @apply text-gray-800 font-medium mb-2;
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-weight: 750;
 }
 
 .alert-details {
-  @apply text-sm text-gray-600 space-y-1;
+  display: grid;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 .alert-device,
 .alert-time {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
 }
 
 .alert-device .el-icon,
 .alert-time .el-icon {
-  @apply mr-1;
+  margin-right: 6px;
+  color: #8ddfff;
 }
 
 .alert-image {
-  @apply mb-3;
+  margin-bottom: 12px;
 }
 
 .alert-image img {
-  @apply w-full h-32 object-cover rounded cursor-pointer;
+  width: 100%;
+  height: 128px;
+  cursor: pointer;
+  border: 1px solid rgba(126, 211, 255, 0.18);
+  border-radius: 6px;
+  object-fit: cover;
 }
 
 .alert-actions {
-  @apply flex justify-end;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .modal-image {
-  @apply w-full max-h-96 object-contain;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
 }
 </style>

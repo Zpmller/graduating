@@ -178,30 +178,53 @@ onUnmounted(() => {
 
 <style scoped>
 .video-player {
-  @apply relative;
+  position: relative;
 }
 
 .video-container {
-  @apply relative bg-black rounded-lg overflow-hidden;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(126, 211, 255, 0.22);
+  border-radius: 8px;
+  background: #000;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
 }
 
 .video-element {
-  @apply w-full h-auto max-h-96;
+  width: 100%;
+  height: auto;
+  max-height: 64vh;
 }
 
 .video-controls {
-  @apply absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 p-4 flex items-center justify-between;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border-top: 1px solid rgba(126, 211, 255, 0.18);
+  background: rgba(2, 10, 18, 0.78);
+  backdrop-filter: blur(14px);
 }
 
 .control-group {
-  @apply flex items-center space-x-2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .quality-select {
-  @apply w-32;
+  width: 128px;
 }
 
 .connection-status {
-  @apply absolute top-4 left-4 right-4;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  left: 14px;
 }
 </style>

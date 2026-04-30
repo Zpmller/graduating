@@ -13,9 +13,9 @@ function normalizeDeviceStatus(s: unknown): 'online' | 'offline' | 'maintenance'
   return 'offline';
 }
 
-function normalizeDevice(d: Record<string, unknown>): Device {
+function normalizeDevice(d: Device): Device {
   const status = normalizeDeviceStatus(d.status);
-  return { ...d, status } as Device;
+  return { ...d, status };
 }
 
 export const useDeviceStore = defineStore('devices', () => {
@@ -81,7 +81,7 @@ export const useDeviceStore = defineStore('devices', () => {
 
     try {
       const newDevice = await deviceApi.create(data);
-      devices.value.push(normalizeDevice(newDevice as Record<string, unknown>));
+      devices.value.push(normalizeDevice(newDevice));
       return newDevice;
     } catch (err: any) {
       error.value = err.detail || '创建设备失败';
@@ -99,7 +99,7 @@ export const useDeviceStore = defineStore('devices', () => {
       const updatedDevice = await deviceApi.update(id, data);
       const index = devices.value.findIndex(device => device.id === id);
       if (index !== -1) {
-        devices.value[index] = normalizeDevice(updatedDevice as Record<string, unknown>);
+        devices.value[index] = normalizeDevice(updatedDevice);
       }
       return updatedDevice;
     } catch (err: any) {

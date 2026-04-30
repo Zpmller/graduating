@@ -81,42 +81,103 @@ onUnmounted(() => {
 
 <style scoped>
 .header {
-  @apply bg-white border-b border-gray-200 px-6 py-4;
+  position: relative;
+  z-index: 2;
+  padding: 14px 18px 0;
 }
 
 .header-content {
-  @apply flex items-center justify-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding: 0 18px;
+  border: 1px solid rgba(126, 211, 255, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.018)),
+    rgba(6, 23, 38, 0.72);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(130%);
 }
 
 .header-left {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .page-title {
-  @apply text-2xl font-bold text-gray-800;
+  margin: 0;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 850;
+  line-height: 1.1;
+  letter-spacing: 0;
 }
 
 .header-right {
-  @apply flex items-center space-x-6;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
 .status-indicators {
-  @apply flex items-center space-x-4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .status-item {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
+}
+
+.status-item :deep(.el-button) {
+  min-height: 34px;
+  padding-inline: 12px;
 }
 
 .critical-badge :deep(.el-badge__content) {
-  @apply bg-red-500;
+  border: 0;
+  background: var(--accent-red);
+  box-shadow: 0 0 16px rgba(255, 77, 104, 0.45);
 }
 
 .online-badge :deep(.el-badge__content) {
-  @apply bg-green-500;
+  border: 0;
+  background: var(--accent-emerald);
+  color: #032014;
+  box-shadow: 0 0 16px rgba(57, 231, 159, 0.42);
 }
 
 .time-display {
-  @apply text-sm text-gray-600 font-mono;
+  padding: 8px 10px;
+  border: 1px solid rgba(126, 211, 255, 0.16);
+  border-radius: 6px;
+  color: #bde6ff;
+  background: rgba(2, 12, 22, 0.45);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .header {
+    padding: 10px 12px 0;
+  }
+
+  .header-content,
+  .header-right,
+  .status-indicators {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .header-content {
+    padding: 14px;
+  }
 }
 </style>

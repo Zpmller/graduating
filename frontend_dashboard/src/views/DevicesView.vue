@@ -1,8 +1,7 @@
 <template>
   <AppLayout>
-    <div class="devices-view">
-      <!-- Header Actions -->
-      <div class="header-actions">
+    <div class="devices-view mine-page">
+      <div class="header-actions glass-panel glass-toolbar">
         <el-button type="primary" @click="showCreateDialog = true">
           <el-icon><Plus /></el-icon>
           添加设备
@@ -17,12 +16,11 @@
         </el-button>
       </div>
 
-      <!-- Devices Grid -->
-      <div v-if="deviceStore.loading" class="loading-container">
+      <div v-if="deviceStore.loading" class="loading-container glass-panel">
         <LoadingSpinner text="加载设备中..." />
       </div>
 
-      <div v-else-if="deviceStore.devices.length === 0" class="empty-container">
+      <div v-else-if="deviceStore.devices.length === 0" class="empty-container glass-panel">
         <EmptyState
           description="暂无设备"
           action-text="添加设备"
@@ -34,7 +32,7 @@
         <div
           v-for="device in deviceStore.devices"
           :key="device.id"
-          class="device-card"
+          class="device-card glass-panel"
           :class="`device-card--${(device.status || 'offline').toLowerCase()}`"
         >
           <div class="device-header">
@@ -390,96 +388,169 @@ onUnmounted(() => {
 
 <style scoped>
 .devices-view {
-  @apply space-y-6;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .header-actions {
-  @apply flex justify-between items-center;
+  justify-content: flex-start;
 }
 
 .devices-grid {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .device-card {
-  @apply bg-white rounded-lg shadow-sm border p-6 transition-all hover:shadow-md;
+  position: relative;
+  min-height: 210px;
+  padding: 16px;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.device-card:hover {
+  border-color: rgba(28, 199, 255, 0.45);
+  box-shadow: var(--shadow-glass), 0 0 26px rgba(28, 199, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.device-card::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 96px;
+  height: 2px;
+  content: '';
+  background: currentColor;
+  opacity: 0.58;
+  box-shadow: 0 0 18px currentColor;
 }
 
 .device-card--online {
-  @apply border-green-200;
+  color: var(--accent-emerald);
+  border-color: rgba(57, 231, 159, 0.24);
 }
 
 .device-card--offline {
-  @apply border-gray-200;
+  color: var(--text-muted);
+  border-color: rgba(126, 211, 255, 0.14);
 }
 
 .device-card--maintenance {
-  @apply border-yellow-200;
+  color: var(--accent-amber);
+  border-color: rgba(255, 186, 58, 0.26);
 }
 
 .device-header {
-  @apply flex items-center justify-between mb-4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
 .device-status {
-  @apply flex items-center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.035);
+  color: currentColor;
 }
 
 .status-icon {
-  @apply mr-2 text-lg;
+  font-size: 16px;
 }
 
 .status-icon--online {
-  @apply text-green-500;
+  color: var(--accent-emerald);
 }
 
 .status-icon--offline {
-  @apply text-gray-400;
+  color: var(--text-muted);
 }
 
 .status-icon--maintenance {
-  @apply text-yellow-500;
+  color: var(--accent-amber);
 }
 
 .status-text {
-  @apply font-medium;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 780;
 }
 
 .device-content {
-  @apply space-y-2;
+  display: grid;
+  gap: 8px;
 }
 
 .device-name {
-  @apply text-lg font-semibold text-gray-800;
+  margin: 0;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 850;
+  line-height: 1.25;
 }
 
 .device-location {
-  @apply text-gray-600;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 650;
 }
 
 .device-ip,
 .device-edge-host {
-  @apply text-sm text-gray-500 font-mono;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .device-heartbeat {
-  @apply text-xs text-gray-400;
+  color: var(--text-muted);
+  font-size: 12px;
 }
 
 .stream-tag {
-  @apply mt-2;
+  width: max-content;
+  margin-top: 4px;
 }
 
 .loading-container,
 .empty-container {
-  @apply py-12;
+  padding: 24px;
+  border-radius: 8px;
 }
 
 .stream-container {
-  @apply min-h-[400px];
+  min-height: 400px;
 }
 
 .stream-loading {
-  @apply flex items-center justify-center h-64;
+  display: flex;
+  height: 16rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1180px) {
+  .devices-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .devices-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

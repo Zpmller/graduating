@@ -164,31 +164,51 @@ onMounted(() => {
 
 <style scoped>
 .calibration-panel {
-  @apply space-y-6;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .config-section,
 .images-section {
-  @apply bg-gray-50 rounded-lg p-4;
+  padding: 14px;
+  border: 1px solid rgba(126, 211, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .section-title {
-  @apply text-lg font-semibold mb-4;
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 850;
 }
 
 .config-actions {
-  @apply flex space-x-2 mb-4;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .yaml-editor {
-  @apply font-mono;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 }
 
 .image-upload {
-  @apply mt-4;
+  margin-top: 12px;
 }
 
 .upload-demo {
-  @apply w-full;
+  width: 100%;
+}
+
+.upload-demo :deep(.el-upload-dragger) {
+  border-color: rgba(126, 211, 255, 0.22);
+  background: rgba(3, 16, 28, 0.42);
+}
+
+.upload-demo :deep(.el-upload__text),
+.upload-demo :deep(.el-upload__tip) {
+  color: var(--text-secondary);
 }
 </style>

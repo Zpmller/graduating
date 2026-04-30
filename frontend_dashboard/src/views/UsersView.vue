@@ -1,8 +1,7 @@
 <template>
   <AppLayout>
-    <div class="users-view">
-      <!-- Header Actions -->
-      <div class="header-actions">
+    <div class="users-view mine-page">
+      <div class="header-actions glass-panel glass-toolbar">
         <el-button type="primary" @click="showCreateDialog = true">
           <el-icon><Plus /></el-icon>
           添加用户
@@ -13,8 +12,7 @@
         </el-button>
       </div>
 
-      <!-- Users Table -->
-      <div class="table-section">
+      <div class="table-section glass-panel">
         <el-table
           :data="userStore.users"
           :loading="userStore.loading"
@@ -287,14 +285,22 @@ onUnmounted(() => {
 
 <style scoped>
 .users-view {
-  @apply space-y-6;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .header-actions {
-  @apply flex justify-between items-center;
+  justify-content: flex-start;
 }
 
 .table-section {
-  @apply bg-white rounded-lg shadow-sm p-6;
+  padding: 16px;
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.table-section :deep(.el-table) {
+  min-width: 760px;
 }
 </style>

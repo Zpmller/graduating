@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "title": "危险化学品企业特殊作业安全规范：GB 30871—2022",
+    "authors": "中华人民共和国应急管理部",
+    "year": 2022,
+    "source": "国家标准",
+    "doi_or_url": "https://openstd.samr.gov.cn/",
+    "relevance_note": "动火作业安全距离、监护和特殊作业要求依据",
+    "status": "verified"
+  },
+  {
+    "id": 2,
+    "title": "Ultralytics YOLO Documentation",
+    "authors": "Ultralytics",
+    "year": 2026,
+    "source": "Official documentation",
+    "doi_or_url": "https://docs.ultralytics.com/",
+    "relevance_note": "YOLO11训练、验证与部署工具链",
+    "status": "verified"
+  },
+  {
+    "id": 3,
+    "title": "CylinDeRS: A Benchmark Visual Dataset for Robust Gas Cylinder Detection and Attribute Classification in Real-World Scenes",
+    "authors": "Stavrothanasopoulos K., Gkountakos K., Ioannidis K., et al.",
+    "year": 2025,
+    "source": "Sensors, 25(4):1016",
+    "doi_or_url": "https://www.mdpi.com/3173660",
+    "relevance_note": "气瓶检测数据集与评估背景",
+    "status": "verified"
+  },
+  {
+    "id": 4,
+    "title": "Dist-YOLO: Fast Object Detection with Distance Estimation",
+    "authors": "Vajgl M., Hurtik P., Nejezchleba T.",
+    "year": 2022,
+    "source": "Applied Sciences, 12(3):1354",
+    "doi_or_url": "https://doi.org/10.3390/app12031354",
+    "relevance_note": "目标检测与单目距离估计结合思路",
+    "status": "verified"
+  },
+  {
+    "id": 5,
+    "title": "ArcFace: Additive Angular Margin Loss for Deep Face Recognition",
+    "authors": "Deng J., Guo J., Xue N., Zafeiriou S.",
+    "year": 2019,
+    "source": "CVPR 2019",
+    "doi_or_url": "https://openaccess.thecvf.com/content_CVPR_2019/html/Deng_ArcFace_Additive_Angular_Margin_Loss_for_Deep_Face_Recognition_CVPR_2019_paper.html",
+    "relevance_note": "人脸授权识别模块的特征比对依据",
+    "status": "verified"
+  },
+  {
+    "id": 6,
+    "title": "An open flame and smoke detection dataset for deep learning in remote sensing based fire detection",
+    "authors": "Wang M., Yue P., Jiang L., et al.",
+    "year": 2025,
+    "source": "Geo-spatial Information Science, 28(2)",
+    "doi_or_url": "https://doi.org/10.1080/10095020.2024.2347922",
+    "relevance_note": "火焰与烟雾检测数据及深度学习检测背景",
+    "status": "verified"
+  },
+  {
+    "id": 7,
+    "title": "FastAPI Official Documentation",
+    "authors": "FastAPI",
+    "year": 2026,
+    "source": "Official documentation",
+    "doi_or_url": "https://fastapi.org/",
+    "relevance_note": "后端REST API框架依据",
+    "status": "verified"
+  },
+  {
+    "id": 8,
+    "title": "Vue.js Official Documentation",
+    "authors": "Vue.js",
+    "year": 2026,
+    "source": "Official documentation",
+    "doi_or_url": "https://vuejs.org/",
+    "relevance_note": "管理端单页应用框架依据",
+    "status": "verified"
+  },
+  {
+    "id": 9,
+    "title": "OpenCV Documentation",
+    "authors": "OpenCV",
+    "year": 2026,
+    "source": "Official documentation",
+    "doi_or_url": "https://docs.opencv.org/",
+    "relevance_note": "视频读取、图像处理和CLAHE增强实现依据",
+    "status": "verified"
+  },
+  {
+    "id": 10,
+    "title": "SRS: Simple Realtime Server",
+    "authors": "OSSRS",
+    "year": 2026,
+    "source": "Official documentation",
+    "doi_or_url": "https://ossrs.io/",
+    "relevance_note": "RTMP到WHEP/WebRTC视频链路依据",
+    "status": "verified"
+  },
+  {
+    "id": 11,
+    "title": "YOLOv3: An Incremental Improvement",
+    "authors": "Redmon J., Farhadi A.",
+    "year": 2018,
+    "source": "arXiv:1804.02767",
+    "doi_or_url": "https://arxiv.org/abs/1804.02767",
+    "relevance_note": "YOLO系列单阶段检测方法背景",
+    "status": "verified"
+  },
+  {
+    "id": 12,
+    "title": "Zero-Reference Deep Curve Estimation for Low-Light Image Enhancement",
+    "authors": "Guo C., Li C., Guo J., et al.",
+    "year": 2020,
+    "source": "CVPR 2020",
+    "doi_or_url": "https://openaccess.thecvf.com/content_CVPR_2020/html/Guo_Zero-Reference_Deep_Curve_Estimation_for_Low-Light_Image_Enhancement_CVPR_2020_paper.html",
+    "relevance_note": "低照度增强研究背景",
+    "status": "verified"
+  }
+]
