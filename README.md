@@ -48,10 +48,12 @@ start_system.bat
 - Frontend: `http://localhost:5173`
 - AI Edge: PyQt 桌面程序
 
-如果只需要后端和边缘端：
+如果只需要边缘端：
 
-```bat
-start_ai_backend.bat
+```bash
+cd ai_edge_system
+pip install -r requirements.txt
+python main.py
 ```
 
 ### 手动启动
