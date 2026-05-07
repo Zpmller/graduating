@@ -9,6 +9,12 @@ from typing import Optional, Dict, Any
 from dataclasses import dataclass
 
 
+def _backend_session() -> requests.Session:
+    session = requests.Session()
+    session.trust_env = False
+    return session
+
+
 @dataclass
 class DeviceConfig:
     """设备配置"""
@@ -67,7 +73,7 @@ def fetch_bootstrap(
         url += f"&secret={bootstrap_secret}"
 
     try:
-        r = requests.get(url, timeout=10)
+        r = _backend_session().get(url, timeout=10)
         if r.status_code == 200:
             data = r.json()
             return DeviceConfig(
@@ -105,7 +111,7 @@ def fetch_me(
     url = f"{base}/devices/me"
 
     try:
-        r = requests.get(
+        r = _backend_session().get(
             url,
             headers={"X-Device-Token": device_token},
             timeout=10,

@@ -119,7 +119,7 @@ class StreamService:
         last_streams_count = None
         while time.monotonic() < deadline:
             try:
-                async with httpx.AsyncClient(timeout=3.0, follow_redirects=True) as client:
+                async with httpx.AsyncClient(timeout=3.0, follow_redirects=True, trust_env=False) as client:
                     resp = await client.get(f"{api_url}?count=50")
                 last_status = resp.status_code
                 if resp.status_code != 200:
@@ -280,7 +280,7 @@ class StreamService:
             "device_id": device_id,
         }
         try:
-            async with httpx.AsyncClient(timeout=5.0) as client:
+            async with httpx.AsyncClient(timeout=5.0, trust_env=False) as client:
                 resp = await client.post(url, json=payload)
                 # #region agent log
                 _debug_log("stream_service:notify_edge", "Edge notify result", {"url": url, "status_code": resp.status_code, "stream_id": stream_id})

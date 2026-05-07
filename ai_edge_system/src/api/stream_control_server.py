@@ -67,9 +67,18 @@ def _api_stream_worker(device_id: int, stream_id: str, media_server_url: str, qu
 
         # 视频源："0" 或空为默认摄像头，否则为 RTSP/URL 或摄像头索引
         source = (source_url or "").strip() or "0"
+        capture_backend = cv2.CAP_ANY
         if source.isdigit():
             source = int(source)
-        cap = cv2.VideoCapture(source)
+            capture_backend = cv2.CAP_DSHOW
+        elif str(source).lower().startswith(("rtsp://", "rtmp://", "http://", "https://")):
+            os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;tcp|timeout;5000000|max_delay;500000"
+            capture_backend = cv2.CAP_FFMPEG
+        if capture_backend == cv2.CAP_FFMPEG:
+            cap = cv2.VideoCapture(source, capture_backend)
+            cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+        else:
+            cap = cv2.VideoCapture(source, capture_backend)
         _api_stream_state["cap"] = cap
         if not cap.isOpened():
             print(f"[StreamControl] Failed to open source: {source}")
@@ -149,6 +158,7 @@ def stream_control():
             base_url = rtsp_push_url.rsplit("/", 1)[0] if "/" in rtsp_push_url else rtsp_push_url
 
         device_id = int(device_id) if device_id is not None else 0
+        source_clean = str(source_url or "0").strip() or "0"
 
         # 若已有 API 推流在跑，先停掉
         if _api_stream_state.get("thread") and _api_stream_state["thread"].is_alive():
@@ -156,11 +166,46 @@ def stream_control():
                 _api_stream_state["stop_event"].set()
             _api_stream_state["thread"].join(timeout=3.0)
 
+        if (
+            _main_window_ref is not None
+            and source_clean in ("0", "camera", "local")
+            and getattr(_main_window_ref, "is_monitoring", False)
+        ):
+            existing_streamer = getattr(_main_window_ref, "video_streamer", None)
+            if existing_streamer:
+                try:
+                    existing_streamer.stop_stream()
+                except Exception:
+                    pass
+            if _api_stream_state.get("streamer"):
+                try:
+                    _api_stream_state["streamer"].stop_stream()
+                except Exception:
+                    pass
+            _api_stream_state["streamer"] = None
+            _api_stream_state["cap"] = None
+            _api_stream_state["thread"] = None
+            from src.core.streamer import VideoStreamer
+            _main_window_ref.video_streamer = VideoStreamer(
+                media_server_url=base_url,
+                device_id=device_id,
+                stream_id=stream_id,
+                quality=quality,
+            )
+            _main_window_ref.video_streamer.start_stream()
+            _main_window_ref.stream_config.update({
+                "device_id": device_id,
+                "stream_id": stream_id,
+                "media_server_url": base_url,
+                "quality": quality,
+            })
+            return jsonify({"status": "ok", "stream_id": stream_id, "source": "main_window"})
+
         stop_event = threading.Event()
         _api_stream_state["stop_event"] = stop_event
         _api_stream_state["thread"] = threading.Thread(
             target=_api_stream_worker,
-            args=(device_id, stream_id, base_url, quality, source_url or "0"),
+            args=(device_id, stream_id, base_url, quality, source_clean),
             daemon=True,
         )
         _api_stream_state["thread"].start()
@@ -174,6 +219,11 @@ def stream_control():
 def stream_stop():
     """停止 API 触发的推流"""
     global _api_stream_state
+    if _main_window_ref is not None and getattr(_main_window_ref, "video_streamer", None):
+        try:
+            _main_window_ref.stop_video_stream()
+        except Exception:
+            pass
     if _api_stream_state.get("stop_event"):
         _api_stream_state["stop_event"].set()
     if _api_stream_state.get("thread") and _api_stream_state["thread"].is_alive():

@@ -110,7 +110,7 @@ docker compose up -d
 - `/alerts`：告警上传、查询、统计、确认。
 - `/tasks`：任务 CRUD。
 - `/faces`：授权人脸图片上传、列表、图片读取。
-- `/devices/{id}/stream/*`：视频流 offer、answer、状态、控制和停止。
+- `/devices/{id}/stream/*`：视频流 offer、兼容 answer、状态、控制和停止；WHEP 播放主链路通过 `/stream/whep/{stream_id}` 转发。
 - `/system/health`：健康检查。
 
 ## 文档入口

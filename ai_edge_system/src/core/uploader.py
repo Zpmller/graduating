@@ -21,6 +21,8 @@ class AlertUploader:
         self.running = True
         self._heartbeat_thread = None
         self._heartbeat_stop = threading.Event()
+        self._session = requests.Session()
+        self._session.trust_env = False
 
         self.thread = threading.Thread(target=self._upload_loop, daemon=True)
         self.thread.start()
@@ -72,7 +74,7 @@ class AlertUploader:
                 break
             try:
                 url = f"{self.backend_url}/devices/{self.device_id}/heartbeat"
-                r = requests.post(
+                r = self._session.post(
                     url,
                     headers={"X-Device-Token": self.device_token},
                     timeout=5,
@@ -135,7 +137,7 @@ class AlertUploader:
                 "alert_data": (None, json.dumps(payload), "application/json")
             }
             
-            response = requests.post(url, headers=headers, files=files, timeout=5)
+            response = self._session.post(url, headers=headers, files=files, timeout=5)
             
             if response.status_code == 201:
                 print(f"[Uploader] Alert uploaded successfully: {payload['type']}")

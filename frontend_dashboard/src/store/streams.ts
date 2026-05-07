@@ -37,6 +37,7 @@ export const useStreamStore = defineStore('streams', () => {
       const initialStatus: StreamStatus = {
         device_id: deviceId,
         is_active: true,
+        stream_id: offer.stream_id,
         quality,
         detection_overlay_enabled: true,
         connection_state: 'connecting',

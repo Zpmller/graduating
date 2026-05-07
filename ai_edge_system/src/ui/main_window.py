@@ -65,6 +65,10 @@ class MainWindow(QMainWindow):
         
         # Camera Setup
         self.cap = None
+        self.capture_source = None
+        self.capture_backend = cv2.CAP_ANY
+        self.capture_is_network = False
+        self.frame_read_failures = 0
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
         self.is_monitoring = False
@@ -151,8 +155,6 @@ class MainWindow(QMainWindow):
             self.stream_config["device_id"] = cfg.device_id
             # 若后端配置了视频源地址，自动填充到输入框
             if cfg.ip_address and hasattr(self, "source_input"):
-                from PyQt5.QtCore import QMetaObject, Qt, Q_ARG
-                from PyQt5.QWidgets import QApplication
                 def _set_source():
                     if hasattr(self, "source_input"):
                         self.source_input.setText(cfg.ip_address or "0")
@@ -415,19 +417,53 @@ class MainWindow(QMainWindow):
         else:
             QMessageBox.critical(self, "Error", "Could not capture frame from camera.")
 
+    def _open_capture(self, source, capture_backend):
+        if capture_backend == cv2.CAP_FFMPEG:
+            os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = (
+                "rtsp_transport;tcp|timeout;5000000|max_delay;500000"
+            )
+            cap = cv2.VideoCapture(source, capture_backend)
+            cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+            return cap
+        return cv2.VideoCapture(source, capture_backend)
+
+    def _reconnect_capture(self):
+        if self.cap:
+            self.cap.release()
+            self.cap = None
+        self.cap = self._open_capture(self.capture_source, self.capture_backend)
+        if self.cap.isOpened():
+            self.frame_read_failures = 0
+            self.log_message("Reconnected video source", "info")
+            return True
+        self.log_message("Reconnect failed: Could not open video source", "error")
+        return False
+
     def start_camera(self):
-        source = self.source_input.text()
+        source_text = self.source_input.text().strip()
+        source = source_text
+        capture_backend = cv2.CAP_ANY
+        is_network = False
         
         # Try to convert to int for camera index
-        if source.isdigit():
-            source = int(source)
+        if source_text.isdigit():
+            source = int(source_text)
+            capture_backend = cv2.CAP_DSHOW
         elif source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://')):
             self.log_message(f"Connecting to network stream: {source}...", "info")
-            # For some RTMP streams, enforcing FFMPEG backend might be more stable
-            # source = source # OpenCV auto-detects usually works
+            capture_backend = cv2.CAP_FFMPEG
+            is_network = True
             
         try:
-            self.cap = cv2.VideoCapture(source)
+            if self.cap:
+                self.cap.release()
+                self.cap = None
+
+            self.capture_source = source
+            self.capture_backend = capture_backend
+            self.capture_is_network = is_network
+            self.frame_read_failures = 0
+            self.cap = self._open_capture(source, capture_backend)
             if not self.cap.isOpened():
                 raise Exception("Could not open video source")
                 
@@ -480,6 +516,7 @@ class MainWindow(QMainWindow):
         if self.cap and self.cap.isOpened():
             ret, frame = self.cap.read()
             if ret:
+                self.frame_read_failures = 0
                 # 0. Pre-processing (Enhancement)
                 enhanced_frame = self.enhancer.enhance(frame)
                 
@@ -540,7 +577,12 @@ class MainWindow(QMainWindow):
                 # 6. Display
                 self.display_image(annotated_frame)
             else:
-                # End of file or error
+                self.frame_read_failures += 1
+                if self.capture_is_network:
+                    if self.frame_read_failures >= 3:
+                        self.log_message("Video stream stalled, reconnecting...", "error")
+                        self._reconnect_capture()
+                    return
                 self.stop_camera()
                 self.log_message("Video stream ended", "info")
 

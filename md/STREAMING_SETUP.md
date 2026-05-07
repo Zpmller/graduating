@@ -68,11 +68,29 @@ npm run dev
 1. 前端调用 `GET /api/v1/devices/{id}/stream/offer?quality=medium`。
 2. 后端检查设备和流状态，并通知 Edge 推流。
 3. Edge 使用 FFmpeg 推送到 `rtmp://.../live/{stream_id}`。
-4. 后端返回 `stream_id`、`whep_url` 和 offer 信息。
-5. 前端创建 WebRTC 连接，并调用 `POST /api/v1/devices/{id}/stream/answer`。
-6. 播放过程中可调用状态和控制接口。
+4. 后端返回 `stream_id` 和相对路径 `whep_url=/stream/whep/{stream_id}`。
+5. 前端创建 WebRTC offer，并将 SDP 通过 `POST /api/v1/stream/whep/{stream_id}` 提交给后端。
+6. 后端将 WHEP 请求转发到 SRS `/rtc/v1/whep/?app=live&stream={stream_id}`，并把 SRS answer 返回给前端。
+7. `/devices/{id}/stream/answer` 仅保留为兼容/状态接口，当前 WHEP 播放主链路不依赖该接口。
+8. 播放过程中可调用状态和控制接口。
 
-## 6. 常见问题
+## 6. Edge 视频源与并发限制
+
+当前 AI Edge 是单设备/单视频源运行模型：
+
+- 桌面主窗口只有一个 `VideoCapture`、一个检测循环和一个 `VideoStreamer`。
+- Edge 本地控制服务当前只有一个全局推流状态 `_api_stream_state`。
+- 新的推流请求会停止旧的 API 推流；本机摄像头 `0` 已被主窗口监控时，后端触发的推流会复用主窗口处理后的画面，避免重复打开摄像头。
+
+如果需要多设备同时运行，推荐先采用“一个设备启动一个 AI Edge 进程”的部署方式；真正单进程多路并行需要为每个设备拆分独立采集、检测、推流和状态管理。
+
+Edge 打开视频源的策略：
+
+- 本机摄像头索引（如 `0`）使用 OpenCV DirectShow 后端（`CAP_DSHOW`）。
+- RTSP/RTMP/HTTP 视频源使用 OpenCV FFmpeg 后端（`CAP_FFMPEG`），RTSP 强制 TCP，并使用小缓冲降低延迟。
+- 网络流读帧失败时会尝试重连，避免一次 RTSP 卡顿直接停止监控。
+
+## 7. 常见问题
 
 ### 设备离线
 
@@ -92,6 +110,12 @@ npm run dev
 - Edge 是否收到后端控制请求。
 - `MEDIA_SERVER_RTMP_URL` 是否与 SRS RTMP 端口一致。
 - `CANDIDATE` 是否为前端可达地址。
+- SRS `/api/v1/streams` 中对应流是否 `publish.active=true` 且 `video` 不为 `null`。
+- RTSP 源是否可用，可用 `ffprobe -rtsp_transport tcp "<rtsp_url>"` 验证。
+
+### 本地代理导致 WHEP 或 Edge 控制异常
+
+后端访问 SRS/Edge 的内部 HTTP 请求已显式绕过环境代理（`trust_env=False`），避免系统 `HTTP_PROXY`/`ALL_PROXY` 将 `localhost` 请求导向 SOCKS 代理。依赖中使用 `httpx[socks]` 作为兜底，兼容确实需要 SOCKS 的运行环境。
 
 ### 前端 WebRTC 连接失败
 
@@ -102,7 +126,7 @@ npm run dev
 - Docker `8000/udp` 是否开放。
 - 后端 `/devices/{id}/stream/status` 返回的 `connection_state` 和 `error`。
 
-## 7. 验证命令
+## 8. 验证命令
 
 ```bash
 docker ps

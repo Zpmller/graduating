@@ -1,16 +1,11 @@
 import type { StreamOffer } from '@/types';
 import apiClient from '@/api/axios';
 
-// #region agent log
 const _dbg = (msg: string, data: Record<string, unknown>) => {
-  console.log('[StreamDebug]', msg, data);
-  fetch('http://127.0.0.1:7906/ingest/961b9707-2d8e-4b68-9d7c-de21fdda61c9', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '870502' },
-    body: JSON.stringify({ sessionId: '870502', location: 'webrtc.ts', message: msg, data: { ...data, timestamp: Date.now() } })
-  }).catch(() => {});
+  if (localStorage.getItem('stream_debug') === '1') {
+    console.log('[StreamDebug]', msg, data);
+  }
 };
-// #endregion
 
 /**
  * 确保 SDP 包含 a=group:BUNDLE，SRS 强制要求

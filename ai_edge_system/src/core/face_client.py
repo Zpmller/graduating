@@ -15,6 +15,7 @@ class FaceClient:
         self.backend_url = (backend_url or os.getenv("BACKEND_URL", "http://localhost:8000/api/v1")).rstrip("/")
         self.device_token = device_token or os.getenv("DEVICE_TOKEN", "")
         self._session = requests.Session()
+        self._session.trust_env = False
         if self.device_token:
             self._session.headers["X-Device-Token"] = self.device_token
 

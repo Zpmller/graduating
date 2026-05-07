@@ -87,7 +87,7 @@ async def whep_proxy(
         # #region agent log
         _debug_log("streams.py:whep_proxy:before_post", "before SRS POST", {"srs_url": srs_url}, "H3")
         # #endregion
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=10.0, trust_env=False) as client:
             last_err: Optional[Exception] = None
             for attempt in range(3):
                 try:

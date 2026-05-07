@@ -85,7 +85,7 @@ Pinia store 按业务域拆分：
 - `devices.ts` -> `/devices/`、标定接口
 - `alerts.ts` -> `/alerts/`、`/alerts/stats`
 - `tasks.ts` -> `/tasks/`
-- `streams.ts` -> `/devices/{id}/stream/*`
+- `streams.ts` -> `/devices/{id}/stream/*` 和 WHEP 代理 `/stream/whep/{stream_id}`
 - `system.ts` -> `/system/health`
 
 类型定义集中在 `src/types/api.d.ts`，包括用户、设备、告警、任务和视频流类型。
@@ -101,10 +101,11 @@ Pinia store 按业务域拆分：
 播放流程：
 
 1. 前端请求 `/devices/{id}/stream/offer`。
-2. 后端返回 `stream_id`、`whep_url`、`offer` 信息。
-3. 前端创建 WebRTC 连接并提交 answer。
-4. SRS 将 Edge RTMP 推流转换为 WebRTC/WHEP 播放。
-5. 前端通过状态接口和 store 更新 UI。
+2. 后端返回 `stream_id` 和 `whep_url` 信息。
+3. 前端创建 WebRTC offer，并将 SDP 提交到后端 WHEP 代理 `POST /stream/whep/{stream_id}`。
+4. 后端将 WHEP 请求转发给 SRS，前端使用 SRS answer 建立 WebRTC 播放。
+5. SRS 将 Edge RTMP 推流转换为 WebRTC/WHEP 播放。
+6. 前端通过状态接口和 store 更新 UI。
 
 ## 9. 构建与测试
 

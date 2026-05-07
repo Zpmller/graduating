@@ -139,8 +139,6 @@ Edge 上传告警时使用 multipart 表单：
 - `image`：证据图片。
 - `alert_data`：JSON 字符串，包含 `type`、`level`、`message`、`timestamp`。
 
-## 6. 任务
-
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
 | `GET` | `/tasks/` | 任务分页列表，支持 `skip`、`limit`、`status`、`assignee_id` |
@@ -158,11 +156,13 @@ Edge 上传告警时使用 multipart 表单：
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
 | `GET` | `/devices/{device_id}/stream/offer` | 获取播放 offer/WHEP 信息，支持 `quality` |
-| `POST` | `/devices/{device_id}/stream/answer` | 提交 WebRTC answer |
+| `POST` | `/devices/{device_id}/stream/answer` | 兼容接口：提交 WebRTC answer 并更新流状态；WHEP 主播放链路不依赖 |
 | `GET` | `/devices/{device_id}/stream/status` | 获取流状态 |
 | `POST` | `/devices/{device_id}/stream/control` | 控制推流 |
 | `DELETE` | `/devices/{device_id}/stream` | 停止指定流 |
 | `POST` | `/stream/whep/{stream_id}` | WHEP 转发入口 |
+
+当前播放主流程：前端先请求 /devices/{device_id}/stream/offer，再创建 WebRTC offer，并将 SDP 通过 /stream/whep/{stream_id} 交给后端转发到 SRS。/devices/{device_id}/stream/answer 保留用于兼容旧接口和状态跟踪。
 
 流质量：`low`、`medium`、`high`。
 

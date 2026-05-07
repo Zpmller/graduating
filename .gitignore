@@ -22,6 +22,10 @@ dist/
 build/
 coverage/
 *.tsbuildinfo
+frontend_dashboard/src/**/*.js
+frontend_dashboard/src/**/*.d.ts
+!frontend_dashboard/src/types/**/*.d.ts
+!frontend_dashboard/env.d.ts
 
 # Environment and secrets
 .env

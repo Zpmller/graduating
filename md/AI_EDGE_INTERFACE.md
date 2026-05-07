@@ -101,7 +101,11 @@ Edge 本地控制服务用于后端发起推流控制。默认端口由后端 `E
 控制能力包括：
 
 - 开始推流。
-- 停止推流。
+- 本机摄像头索引（如 `0`）使用 OpenCV DirectShow 后端（`CAP_DSHOW`）。
+- RTSP/RTMP/HTTP 源使用 OpenCV FFmpeg 后端（`CAP_FFMPEG`），RTSP 强制 TCP，并设置小缓冲降低延迟。
+- 网络流读帧失败时会尝试重连；H264 偶发坏帧告警不一定表示链路不可用。
+- `.local` 主机名依赖 mDNS/Bonjour，在 Windows 上可能无法解析；现场部署时优先使用摄像头实际 IP 的 RTSP URL。
+
 - 切换检测覆盖层。
 - 设置推流质量。
 - 查询本地流状态。
@@ -118,6 +122,22 @@ rtmp://localhost:1935/live/{stream_id}
 
 `stream_id` 由后端流服务生成并传给 Edge。前端通过后端获取 WHEP 播放地址，不直接拼接 RTMP 地址。
 
+
+### 8.1 视频源打开策略
+
+- 本机摄像头索引（如 `0`）使用 OpenCV DirectShow 后端（`CAP_DSHOW`）。
+- RTSP/RTMP/HTTP 源使用 OpenCV FFmpeg 后端（`CAP_FFMPEG`），RTSP 强制 TCP，并设置小缓冲降低延迟。
+- 网络流读帧失败时会尝试重连；H264 偶发坏帧告警不一定表示链路不可用。
+- `.local` 主机名依赖 mDNS/Bonjour，在 Windows 上可能无法解析；现场部署时优先使用摄像头实际 IP 的 RTSP URL。
+
+### 8.2 并发限制
+
+当前 AI Edge 进程是单设备/单视频源模型：主窗口只有一个采集对象、一个检测循环和一个推流器；本地控制服务也只有一个全局推流状态。新的 API 推流请求会停止旧的 API 推流。多设备并行建议先采用多个 AI Edge 进程分别绑定不同设备。
+
+### 8.3 本地代理
+
+Edge 访问后端的 bootstrap、心跳、告警和人脸同步请求会绕过系统环境代理，避免 `localhost` 或局域网请求被 `HTTP_PROXY`/`ALL_PROXY` 误导到外部代理。
+
 ## 9. 质量参数
 
 | 质量 | 分辨率 | FPS | 码率 |
@@ -128,6 +148,8 @@ rtmp://localhost:1935/live/{stream_id}
 
 ## 10. 接口维护规则
 
-- 设备配置字段变化时，同步更新后端 schema、前端类型和本文件。
+- 设备配置字段变化时，同步更新后端 schema、前端类型和本文档。
+- Edge 上传告警字段变化时，同步更新 `BACKEND_INTERFACE.md`。
+- 视频流控制参数变化时，同步更新 `STREAMING_SETUP.md` 和前端 `streams.ts` 说明。
 - Edge 上传告警字段变化时，同步更新 `BACKEND_INTERFACE.md`。
 - 视频流控制参数变化时，同步更新 `STREAMING_SETUP.md` 和前端 `streams.ts` 说明。

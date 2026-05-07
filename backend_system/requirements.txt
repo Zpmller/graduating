@@ -21,7 +21,7 @@ bcrypt==3.2.2  # 锁定版本以解决passlib兼容性问题
 # 工具
 python-dotenv>=1.0.0  # 环境变量加载
 PyYAML>=6.0  # YAML处理
-httpx>=0.24.0  # HTTP客户端（流服务需要）
+httpx[socks]>=0.24.0  # HTTP客户端（流服务需要，兼容 SOCKS 代理环境）
 
 # 标定脚本依赖
 opencv-python-headless>=4.8.0

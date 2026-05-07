@@ -124,7 +124,7 @@ export interface ApiError {
 | 前端函数 | 后端路径 |
 | --- | --- |
 | `streamApi.getStreamOffer(deviceId, quality?)` | `GET /devices/{id}/stream/offer` |
-| `streamApi.sendStreamAnswer(deviceId, streamId, answer)` | `POST /devices/{id}/stream/answer` |
+| `streamApi.sendStreamAnswer(deviceId, streamId, answer)` | `POST /devices/{id}/stream/answer`（兼容/状态接口，当前 WHEP 主播放链路不依赖） |
 | `streamApi.getStreamStatus(deviceId)` | `GET /devices/{id}/stream/status` |
 | `streamApi.controlStream(deviceId, params)` | `POST /devices/{id}/stream/control` |
 | `streamApi.stopStream(deviceId, streamId)` | `DELETE /devices/{id}/stream` |

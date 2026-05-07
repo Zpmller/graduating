@@ -167,38 +167,42 @@ class VideoStreamer:
                 pass
     
     def _stream_loop(self):
-        """流推送循环（在独立线程中运行）"""
+        """Run the FFmpeg push loop in a background thread."""
         frame_interval = 1.0 / self.fps
         last_frame_time = time.time()
-        
-        while self.is_streaming:
-            try:
-                # 从队列获取帧（带超时）
-                frame = self.frame_queue.get(timeout=0.1)
-                
-                # 控制帧率
-                current_time = time.time()
-                elapsed = current_time - last_frame_time
-                if elapsed < frame_interval:
-                    time.sleep(frame_interval - elapsed)
-                
-                # 写入帧（仅使用 FFmpeg 管道）
-                if hasattr(self, "ffmpeg_process") and self.ffmpeg_process:
-                    try:
-                        self.ffmpeg_process.stdin.write(frame.tobytes())
-                        self.ffmpeg_process.stdin.flush()
-                    except (BrokenPipeError, OSError) as e:
-                        print(f"[VideoStreamer] Error writing to FFmpeg: {e}")
-                        break
-                
-                last_frame_time = time.time()
-                
-            except queue.Empty:
-                continue
-            except Exception as e:
-                print(f"[VideoStreamer] Error in stream loop: {e}")
-                break
-    
+
+        try:
+            while self.is_streaming:
+                try:
+                    frame = self.frame_queue.get(timeout=0.1)
+
+                    current_time = time.time()
+                    elapsed = current_time - last_frame_time
+                    if elapsed < frame_interval:
+                        time.sleep(frame_interval - elapsed)
+
+                    if hasattr(self, "ffmpeg_process") and self.ffmpeg_process:
+                        if self.ffmpeg_process.poll() is not None:
+                            print(f"[VideoStreamer] FFmpeg exited with code {self.ffmpeg_process.returncode}")
+                            break
+                        try:
+                            self.ffmpeg_process.stdin.write(frame.tobytes())
+                            self.ffmpeg_process.stdin.flush()
+                        except (BrokenPipeError, OSError) as e:
+                            print(f"[VideoStreamer] Error writing to FFmpeg: {e}")
+                            break
+
+                    last_frame_time = time.time()
+
+                except queue.Empty:
+                    continue
+                except Exception as e:
+                    print(f"[VideoStreamer] Error in stream loop: {e}")
+                    break
+        finally:
+            self.is_streaming = False
+            self._close_ffmpeg_process()
+
     def toggle_overlay(self, enabled: bool):
         """
         切换检测覆盖层
@@ -254,13 +258,7 @@ class VideoStreamer:
             self.video_writer = None
         
         # 关闭FFmpeg进程
-        if hasattr(self, 'ffmpeg_process') and self.ffmpeg_process:
-            try:
-                self.ffmpeg_process.stdin.close()
-                self.ffmpeg_process.terminate()
-                self.ffmpeg_process.wait(timeout=2)
-            except Exception as e:
-                print(f"[VideoStreamer] Error closing FFmpeg: {e}")
+        self._close_ffmpeg_process()
         
         # 清空队列
         while not self.frame_queue.empty():
@@ -270,6 +268,20 @@ class VideoStreamer:
                 break
         
         print(f"[VideoStreamer] Stream stopped: {self.stream_id}")
+
+    def _close_ffmpeg_process(self):
+        """Close FFmpeg after normal stop or broken pipe."""
+        if hasattr(self, 'ffmpeg_process') and self.ffmpeg_process:
+            try:
+                if self.ffmpeg_process.stdin and not self.ffmpeg_process.stdin.closed:
+                    self.ffmpeg_process.stdin.close()
+                if self.ffmpeg_process.poll() is None:
+                    self.ffmpeg_process.terminate()
+                    self.ffmpeg_process.wait(timeout=2)
+            except Exception as e:
+                print(f"[VideoStreamer] Error closing FFmpeg: {e}")
+            finally:
+                self.ffmpeg_process = None
     
     def get_status(self) -> Dict:
         """
